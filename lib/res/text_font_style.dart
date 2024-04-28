@@ -1,0 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class TextFontStyle {
+  TextFontStyle._();
+//new
+
+  static final headline32StyleOpenSansBold = GoogleFonts.inter(
+      color: Colors.white, fontSize: 32.sp, fontWeight: FontWeight.w700);
+  static final headline12StylePoppins= GoogleFonts.poppins(
+      color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w400);
+}
