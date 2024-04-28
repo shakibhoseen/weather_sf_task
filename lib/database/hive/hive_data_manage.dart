@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:hive/hive.dart';
 import 'package:weather_sf_task/model/weather_parrent_model.dart';
@@ -36,6 +37,6 @@ class MyHiveRepository {
 
 extension JsonSerializable on MyJsonData {
   String toJson() {
-    return weatherParentData.toJson().toString();
+    return jsonEncode(weatherParentData.toJson());
   }
 }

@@ -10,4 +10,13 @@ class TextFontStyle {
       color: Colors.white, fontSize: 32.sp, fontWeight: FontWeight.w700);
   static final headline12StylePoppins= GoogleFonts.poppins(
       color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w400);
+
+  static final headline18StylePoppins= GoogleFonts.poppins(
+      color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w400);
+
+  static final headline42StylePoppins= GoogleFonts.poppins(
+      color: Colors.white, fontSize: 42.sp, fontWeight: FontWeight.w400);
+
+  static final headline16StyleInter= GoogleFonts.inter(
+      color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w400);
 }
