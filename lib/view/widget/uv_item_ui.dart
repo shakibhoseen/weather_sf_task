@@ -11,7 +11,7 @@ class UvItemUi extends StatelessWidget {
         SizedBox(
           height: 56.h,
           width: 56.h,
-          child: ,
+
         )
       ],
     ));
