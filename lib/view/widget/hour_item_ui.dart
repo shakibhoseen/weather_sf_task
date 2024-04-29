@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:weather_sf_task/component/svg_show.dart';
 
 import '../../bloc/degree/bloc/degree_bloc.dart';
 import '../../component/custom_catch_image.dart';
@@ -65,7 +66,7 @@ class HourItemUi extends StatelessWidget {
             SizedBox(
               height: 48.w,
               width: 48.w,
-              child: CustomCacheImageShow(imageUrl: UrlHelper.getImagePath(icon) ,),
+              child: SvgShow(path: icon,), //CustomCacheImageShow(imageUrl: UrlHelper.getImagePath(icon) ,),
             ),
             const SizedBox(height: 8),
             BlocBuilder<DegreeBloc, DegreeState>(

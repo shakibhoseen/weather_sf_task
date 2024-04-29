@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_sf_task/bloc/degree/bloc/degree_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:weather_sf_task/res/constant.dart';
 import 'package:weather_sf_task/res/date_parse.dart';
 import 'package:weather_sf_task/res/text_font_style.dart';
 import 'package:weather_sf_task/utils/helper_widget.dart';
+import 'package:weather_sf_task/utils/icon_helper.dart';
 import 'package:weather_sf_task/utils/url_helper.dart';
 import 'package:weather_sf_task/utils/utils.dart';
 
@@ -44,29 +46,42 @@ class HomeScreen extends StatelessWidget {
             AppColor.primaryColor,
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              BlocBuilder<WeatherBlocBloc, WeatherBlocState>(
-                builder: (context, state) {
-                  if (state is WeatherBlocLoading) {
-                    return CircularProgressIndicator();
-                  } else if (state is WeatherBlocFailure) {
-                    return Text('Error ');
-                  } else if (state is WeatherBlocSuccess) {
-                    return ui(state.weather);
-                  }
-                  return Text('Initial');
-                },
+        child: Column(
+          
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    BlocBuilder<WeatherBlocBloc, WeatherBlocState>(
+                      builder: (context, state) {
+                        if (state is WeatherBlocLoading) {
+                          return CircularProgressIndicator();
+                        } else if (state is WeatherBlocFailure) {
+                          return Text('Error ');
+                        } else if (state is WeatherBlocSuccess) {
+                          return ui(state.weather);
+                        }
+                        return Text('Initial');
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+            BottomUi()
+          ],
         ),
       ),
     );
   }
 
   Widget ui(WeatherParentData weather) {
+    // help me to find out actually the time is day or night
+    final dayHelper = DayHelper(
+        sunrise: weather.forecast?.forecastday?[0].astro?.sunrise ?? '',
+        sunset: weather.forecast?.forecastday?[0].astro?.sunset ?? '');
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -77,7 +92,7 @@ class HomeScreen extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgShow(path: AssetNames.locationIconSvg),
+            const SvgShow(path: AssetNames.locationIconSvg),
             addHorizontalSpace(8.w),
             Text(
               'Current Location',
@@ -91,9 +106,16 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
                 width: 135.sp,
                 height: 135.sp,
-                child: CustomCacheImageShow(
-                  imageUrl: UrlHelper.getImagePath(weather.current?.condition?.icon),
-                )),
+                child: SvgShow(
+                  path: IconHelper.getSvgIcon(
+                      code: weather.current?.condition?.code ?? 1000,
+                      isNight: dayHelper.isDayOrNight(
+                          time: weather.current?.lastUpdated ?? '')),
+                )
+                // CustomCacheImageShow(
+                //   imageUrl: UrlHelper.getImagePath(weather.current?.condition?.icon),
+                // ),
+                ),
             addHorizontalSpace(8.w),
             BlocBuilder<DegreeBloc, DegreeState>(builder: (context, state) {
               return Text(
@@ -109,8 +131,15 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('${weather.current?.condition?.text} - Humidity', style: TextFontStyle.headline18StylePoppins,),
-            Text(' ${weather.current?.humidity} %', style: TextFontStyle.headline12StylePoppins.copyWith(color: Colors.lightGreen),),
+            Text(
+              '${weather.current?.condition?.text} - Humidity',
+              style: TextFontStyle.headline18StylePoppins,
+            ),
+            Text(
+              ' ${weather.current?.humidity} %',
+              style: TextFontStyle.headline12StylePoppins
+                  .copyWith(color: Colors.lightGreen),
+            ),
           ],
         ),
         addVerticalSpace(20.sp),
@@ -118,14 +147,26 @@ class HomeScreen extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              ...?weather.forecast?.forecastday?[0].hour?.map((hour) => HourItemUi(icon: hour.condition?.icon ??'', hour: hour.time??'', tempC: hour.tempC ?? 0, tempF: hour.tempC??0))
+              ...forecastListUi(weather.forecast?.forecastday?[0].hour??[], dayHelper),
             ],
           ),
         ),
-        BottomUi(),
+
       ],
     );
   }
 
+  List<Widget> forecastListUi(List<Hour> hours, DayHelper dayHelper){
 
+    return hours.map((hour) =>
+        HourItemUi(
+            icon: IconHelper.getSvgIcon(
+                code: hour.condition?.code ?? 1000,
+                isNight: dayHelper.isDayOrNight(
+                    time: hour.time ?? '')),
+            hour: hour.time ?? '',
+            tempC: hour.tempC ?? 0,
+            tempF: hour.tempC ?? 0)).toList();
+  }
 }
+
