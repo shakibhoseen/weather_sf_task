@@ -19,4 +19,7 @@ class TextFontStyle {
 
   static final headline16StyleInter= GoogleFonts.inter(
       color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w400);
+  static final headline22StylePoppins= GoogleFonts.poppins(
+      color: Colors.white, fontSize: 22.sp, fontWeight: FontWeight.w400);
+
 }

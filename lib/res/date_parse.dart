@@ -17,6 +17,7 @@ class DayHelper{
   DayHelper({required this.sunrise, required this.sunset});
 
   bool isDayOrNight({required String time}) {
+    if(time.isEmpty ) false;
     // Extract hours from sunrise and sunset strings
     int sunriseHour = int.parse(sunrise.split(':')[0]);
     int sunsetHour = int.parse(sunset.split(':')[0]);
