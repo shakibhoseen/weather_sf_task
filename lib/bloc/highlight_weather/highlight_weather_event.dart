@@ -8,11 +8,11 @@ sealed class HighlightWeatherEvent extends Equatable {
 }
 
 class HighLightWeatherChangedEvent extends HighlightWeatherEvent{
-   final Hour hour;
+   final HourAndNowCombine hourNow;
 
-   const HighLightWeatherChangedEvent(this.hour);
+   const HighLightWeatherChangedEvent(this.hourNow);
 
    @override
-   List<Object> get props => [hour];
+   List<Object> get props => [hourNow];
 
 }

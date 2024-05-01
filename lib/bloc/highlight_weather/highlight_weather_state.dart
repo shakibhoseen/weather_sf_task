@@ -10,10 +10,10 @@ sealed class HighlightWeatherState extends Equatable {
 final class HighlightWeatherInitial extends HighlightWeatherState {}
 
 class HighLightWeatherChangedState extends HighlightWeatherState{
-  final Hour hour;
-  const HighLightWeatherChangedState(this.hour);
+  final HourAndNowCombine hourNow;
+  const HighLightWeatherChangedState(this.hourNow);
 
   @override
-  List<Object> get props => [hour];
+  List<Object> get props => [hourNow];
 
 }

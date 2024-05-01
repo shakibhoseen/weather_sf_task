@@ -58,7 +58,7 @@ class HourItemUi extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-                DateParse.getHourWithAm(hour),
+                hour.toLowerCase()=='now'? hour :DateParse.getHourWithAm(hour),
                 textAlign: TextAlign.center,
                 style: TextFontStyle.headline16StyleInter
             ),

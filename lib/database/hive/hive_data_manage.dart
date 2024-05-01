@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:hive/hive.dart';
-import 'package:weather_sf_task/model/weather_parrent_model.dart';
+import 'package:weather_sf_task/model/network/weather_parrent_model.dart';
 
 const key = 'jsonKey', boxName = 'myBox';
 

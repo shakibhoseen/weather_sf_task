@@ -1,7 +1,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_sf_task/model/weather_parrent_model.dart';
+import 'package:weather_sf_task/model/network/weather_parrent_model.dart';
 
 part 'forecast_event.dart';
 

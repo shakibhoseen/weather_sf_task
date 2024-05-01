@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:weather_sf_task/model/weather_parrent_model.dart';
+import 'package:weather_sf_task/model/network/weather_parrent_model.dart';
 
 import '../../bloc/degree/degree_bloc.dart';
 import '../../component/svg_show.dart';

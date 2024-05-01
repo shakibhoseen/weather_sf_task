@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:weather_sf_task/model/weather_parrent_model.dart';
+import 'package:weather_sf_task/model/network/weather_parrent_model.dart';
 import 'package:weather_sf_task/res/app_url.dart';
 
 import '../data/network/base_api_services.dart';

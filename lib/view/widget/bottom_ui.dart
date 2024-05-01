@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_sf_task/bloc/degree/degree_bloc.dart';
 import 'package:weather_sf_task/component/svg_show.dart';
-import 'package:weather_sf_task/model/weather_parrent_model.dart';
+import 'package:weather_sf_task/model/network/weather_parrent_model.dart';
 import 'package:weather_sf_task/res/asset_names.dart';
 import 'package:weather_sf_task/res/constant.dart';
 import 'package:weather_sf_task/res/text_font_style.dart';

@@ -25,7 +25,8 @@ import 'package:weather_sf_task/utils/utils.dart';
 import 'package:weather_sf_task/view/widget/day_selection_ui.dart';
 import 'package:weather_sf_task/view/widget/list_hour_item_ui.dart';
 
-import '../model/weather_parrent_model.dart';
+import '../model/local/hour_current_combine.dart';
+import '../model/network/weather_parrent_model.dart';
 import '../res/net_conectivity.dart';
 import 'widget/bottom_ui.dart';
 import 'widget/highlight_weather_title.dart';
@@ -44,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late ForecastBloc forecastBloc;
   late HighlightWeatherBloc highlightWeatherBloc;
   List<Forecastday>? forecastDayList;
+  Current? current;
 
   void getLocation(BuildContext context) async {
    bool?  connected = await NetConnectivity().checkInternet(context);
@@ -89,6 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         } else if (state is WeatherBlocSuccess) {
                           //state.isCurrent ;
                           forecastDayList = state.weather.forecast?.forecastday;
+                          current = state.weather.current;
+
                           //var hour = Hour
                           return mainUi();
                         }
@@ -140,16 +144,17 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocBuilder<HighlightWeatherBloc, HighlightWeatherState>(
             builder: (context, state) {
           if (state is HighLightWeatherChangedState) {
+            final flag = state.hourNow.current!= null ? DateParse.isTakeFromCurrent(hour: state.hourNow.hour.time, current: state.hourNow.current?.lastUpdated) : false;
             final maxMin = MaxMinCFHolder(
-                tempC: state.hour.tempC,
-                tempF: state.hour.tempF,
+                tempC: flag ? state.hourNow.current?.tempC : state.hourNow.hour.tempC,
+                tempF: flag ? state.hourNow.current?.tempF : state.hourNow.hour.tempF,
                 mxTempC: forecastDayList?[selectedDayIndex].day?.maxtempC,
                 mxTempF: forecastDayList?[selectedDayIndex].day?.maxtempF,
                 minTempC: forecastDayList?[selectedDayIndex].day?.mintempC,
                 minTempF: forecastDayList?[selectedDayIndex].day?.mintempF);
             return HighlightWeatherTitle(
               maxMinCF: maxMin,
-              condition: state.hour.condition,
+              condition: flag ? state.hourNow.current?.condition : state.hourNow.hour.condition,
             );
           }
           return const SizedBox.shrink();
@@ -170,12 +175,21 @@ class _HomeScreenState extends State<HomeScreen> {
             final dayHelper = DayHelper(
                 sunrise: forecastDayList?[selectedDayIndex].astro?.sunrise ?? '',
                 sunset: forecastDayList?[selectedDayIndex].astro?.sunset ?? '');
-            return ListHourItemUi(hours: forecastDayList?[selectedDayIndex].hour ?? [], dayHelper: dayHelper);
+            final p = forecastDayList?[selectedDayIndex].hour ?? [];
+            final  indexWithList = DateParse.removePastHour(p, p[0].time!); // removed past hours
+            final List<HourAndNowCombine> added = createList(indexWithList); // add current if need
+            return ListHourItemUi(hours: added, dayHelper: dayHelper);
           }
         ),
       ],
     );
   }
 
-
+   List<HourAndNowCombine> createList((List<Hour>, int) value,){
+       if(value.$2<0){
+         return value.$1.map((e) => HourAndNowCombine(hour: e)).toList();
+       }
+       return value.$1.mapIndexed((index, element) => HourAndNowCombine(hour: element, current: index == 0? current : null)).toList();
+   }
 }
+
