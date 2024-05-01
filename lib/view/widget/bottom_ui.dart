@@ -2,20 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:weather_sf_task/bloc/degree/bloc/degree_bloc.dart';
+import 'package:weather_sf_task/bloc/degree/degree_bloc.dart';
 import 'package:weather_sf_task/component/svg_show.dart';
+import 'package:weather_sf_task/model/weather_parrent_model.dart';
 import 'package:weather_sf_task/res/asset_names.dart';
 import 'package:weather_sf_task/res/constant.dart';
 import 'package:weather_sf_task/res/text_font_style.dart';
 import 'package:weather_sf_task/view/widget/my_clipper.dart';
+import 'package:weather_sf_task/view/widget/uv_item_ui.dart';
 
 class BottomUi extends StatelessWidget {
-  const BottomUi({super.key});
+  final WeatherParentData? weatherParentData;
+  const BottomUi({super.key,  this.weatherParentData});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.topCenter,
+      alignment: Alignment.bottomCenter,
       children: [
         ClipPath(
           clipper:  const MyClipper(),
@@ -31,7 +34,18 @@ class BottomUi extends StatelessWidget {
            ),
           ),
         ),
+        if(weatherParentData!=null)
+          Column(
+            children: [
+              UvItemUi(uv: '${weatherParentData?.current?.uv}',),
+              SizedBox(height: 6.h,),
+              SunRiseSunSetUi(sunRise: '${weatherParentData?.forecast?.forecastday?[0].astro?.sunrise}',
+              sunSet: '${weatherParentData?.forecast?.forecastday?[0].astro?.sunset}', ),
+              SizedBox(height: 10.h,),
+            ],
+          ),
         Positioned(
+          top: 0,
             child: GestureDetector(
                 onTap: () => context.read<DegreeBloc>().state is CentigradeState
                     ? context.read<DegreeBloc>().add(FahrenheitEvent())

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_sf_task/component/svg_show.dart';
 
-import '../../bloc/degree/bloc/degree_bloc.dart';
+import '../../bloc/degree/degree_bloc.dart';
 import '../../component/custom_catch_image.dart';
 import '../../res/constant.dart';
 import '../../res/date_parse.dart';

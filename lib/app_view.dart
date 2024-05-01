@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:weather_sf_task/res/net_conectivity.dart';
 
 import 'utils/route/routes.dart';
 import 'utils/route/routes_name.dart';

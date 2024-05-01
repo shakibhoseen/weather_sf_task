@@ -20,10 +20,14 @@ class WeatherBlocBloc extends Bloc<WeatherBlocEvent, WeatherBlocState> {
   WeatherBlocBloc() : myHive = MyHiveRepository(), super(WeatherBlocInitial()) {
     on<FetchWeather>((event, emit) async {
       final local = await myHive.getStoreData();
-      if(saveWeather!=null || local!=null){
+      if(event.isConnected){
+
+      }
+      else if(saveWeather!=null || local!=null){
         emit(WeatherBlocSuccess(saveWeather ?? local! ));
         return;
       }
+      log('...........................new fetch');
       emit(WeatherBlocLoading());
       try {
 
