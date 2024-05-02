@@ -1,9 +1,9 @@
 # weather App
 
 
-- Weather realtime /local cache App
+- Weather real-time/local cache App
 
-This Flutter application demonstrates fetching weathe informationn like current, forcast about 3 days and lastUpdated time , get User geoLocation and getting data on basis of it. customise icon with condition code. Using local storage support for when you have no internet connection, and smooth animation when you pressed Today and its automatically moved you the Now date, For state management here i Use a Bloc and very carefully any widget can not build unneccessarily. Use convertion of temparature Unit you can found middle of your screen.
+This Flutter application demonstrates fetching weather information like current, forecast about 3 days, and last updated time, getting User geoLocation and getting data on the basis of it. customize the icon with a condition code. Using local storage support for when you have no internet connection, and smooth animation when you press Today and it automatically moves you to the Now date, For state management here I Use a Bloc and very carefully any widget can not be built unnecessarily. Use the conversion of the temperature Unit you can find in the middle of your screen.
 
 ## Table of Contents
 
