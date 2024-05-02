@@ -62,6 +62,14 @@ class DateParse{
 
   }
 
+  static String getFullTimeFormat(String time){  /// its return actually 12:03AM 03 May 2024
+    DateFormat format = DateFormat("yyyy-MM-dd HH:mm");
+    final date = format.parse(time);
+    DateFormat desireFormat = DateFormat('hh:mm a dd MMM yyyy');
+    return desireFormat.format(date);
+
+  }
+
 }
 
 class DayHelper{
@@ -69,7 +77,8 @@ class DayHelper{
 
   DayHelper({required this.sunrise, required this.sunset});
 
-  bool isDayOrNight({required String time}) {
+  bool isDayOrNight({required String time}) {     /// help me to find out actually the time is day or night
+
     if(time.isEmpty ) false;
     // Extract hours from sunrise and sunset strings
     int sunriseHour = int.parse(sunrise.split(':')[0]);

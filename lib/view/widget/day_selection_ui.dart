@@ -20,19 +20,22 @@ class DaySelectionUi extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: BlocBuilder<ForecastBloc, ForecastState>(
         builder: (context, state) {
-          return Row(
-            children: titleDate
-                .mapIndexed(
-                  (index, element) => GestureDetector(
-                    onTap: () => onChangedIndex.call(index),
-                    child: _SelectUi(
-                        isSelect: state is ForecastChangedState
-                            ? index == state.changeIndex
-                            : index == 0,
-                        title: element),
-                  ),
-                )
-                .toList(),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: titleDate
+                  .mapIndexed(
+                    (index, element) => GestureDetector(
+                      onTap: () => onChangedIndex.call(index),
+                      child: _SelectUi(
+                          isSelect: state is ForecastChangedState
+                              ? index == state.changeIndex
+                              : index == 0,
+                          title: element),
+                    ),
+                  )
+                  .toList(),
+            ),
           );
         },
       ),
@@ -50,7 +53,7 @@ class _SelectUi extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 3.w),
-      padding: EdgeInsets.symmetric(vertical: 12.w, horizontal: 32.w),
+      padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 22.w),
       decoration: BoxDecoration(
           color: isSelect ? Colors.white10 : Colors.black12,
           borderRadius: BorderRadius.circular(25.r)),

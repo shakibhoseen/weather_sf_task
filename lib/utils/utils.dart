@@ -1,4 +1,7 @@
+import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 
 /// Determine the current position of the device.
@@ -42,54 +45,37 @@ Future<Position> determinePosition() async {
   return await Geolocator.getCurrentPosition();
 }
 
+class Utils{
+  static showToastMessage(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
+  }
 
-Widget getWeatherIcon(int code) {
-  switch (code) {
-    case >= 200 && < 300 :
-      return Image.asset(
-          'assets/1.png'
-      );
-    case >= 300 && < 400 :
-      return Image.asset(
-          'assets/2.png'
-      );
-    case >= 500 && < 600 :
-      return Image.asset(
-          'assets/3.png'
-      );
-    case >= 600 && < 700 :
-      return Image.asset(
-          'assets/4.png'
-      );
-    case >= 700 && < 800 :
-      return Image.asset(
-          'assets/5.png'
-      );
-    case == 800 :
-      return Image.asset(
-          'assets/6.png'
-      );
-    case > 800 && <= 804 :
-      return Image.asset(
-          'assets/7.png'
-      );
-    default:
-      return Image.asset(
-          'assets/7.png'
-      );
+  static showFlashBarMessage(
+      String message, FlashType type, BuildContext context) {
+    ///may be you think why i am using WidgetBinding, cause ensure its not show untill
+    /// build process is finish untill flutter exception will happen, like inside async operation
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      showFlushbar(
+          context: context,
+          flushbar: Flushbar(
+            title: type == FlashType.success ? "Success" : "Error",
+            icon: Icon(
+              type == FlashType.success ? Icons.thumb_up : Icons.error,
+              color: Colors.white,
+            ),
+            message: message,
+            backgroundColor: type == FlashType.success ? Colors.green : Colors.red,
+            titleColor: Colors.white,
+            messageColor: Colors.white,
+            duration: const Duration(seconds: 4),
+            flushbarPosition: FlushbarPosition.TOP,
+          )..show(context));
+    });
+
   }
 }
-
-String getGreeting() {
-  final hour = DateTime.now().hour;
-
-  if (hour >= 5 && hour < 12) {
-    return 'Good Morning';
-  } else if (hour >= 12 && hour < 17) {
-    return 'Good Afternoon';
-  } else if (hour >= 17 && hour < 21) {
-    return 'Good Evening';
-  } else {
-    return 'Good Night';
-  }
-}
+enum FlashType { error, success }

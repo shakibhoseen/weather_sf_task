@@ -3,10 +3,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weather_sf_task/bloc/forecast/forecast_bloc.dart';
 import 'package:weather_sf_task/bloc/highlight_weather/highlight_weather_bloc.dart';
 import 'package:weather_sf_task/bloc/weather/weather_bloc_bloc.dart';
 import 'package:weather_sf_task/component/svg_show.dart';
+import 'package:weather_sf_task/database/hive/hive_data_manage.dart';
 import 'package:weather_sf_task/res/asset_names.dart';
 import 'package:weather_sf_task/res/color.dart';
 import 'package:weather_sf_task/res/date_parse.dart';
@@ -38,8 +40,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Current? current;
     DayHelper? dayHelper ;
 
-  void getLocation(BuildContext context) async {
-   bool?  connected = await NetConnectivity().checkInternet(context);
+  void getDataAndLocation(BuildContext context) async {
+     await MyHiveRepository().getStoreData().then((weather) {
+      if(weather!=null){
+        context.read<WeatherBlocBloc>().add(FetchWeatherFromHive(weather));
+      }
+    });
+   bool?  connected = await NetConnectivity.checkInternet().then((value) => Future.delayed(const Duration(seconds: 2), (){
+     if(value == false){
+       Utils.showFlashBarMessage('You\'re not connected to a network so we collect data from Hive', FlashType.error, context);
+     }else if(value == true){
+       Utils.showFlashBarMessage('You\'re connected so we try to fetch data from net. please wait', FlashType.error, context);
+     }
+   }));
 
     determinePosition().then((position) =>
         context.read<WeatherBlocBloc>().add(FetchWeather(position, connected?? false)));
@@ -50,12 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     forecastBloc = context.read<ForecastBloc>();
     highlightWeatherBloc = context.read<HighlightWeatherBloc>();
+    getDataAndLocation(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    getLocation(context);
     return Scaffold(
       body: Container(
         height: double.maxFinite,
@@ -72,14 +85,16 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
+
                   children: [
                     BlocBuilder<WeatherBlocBloc, WeatherBlocState>(
                       builder: (context, state) {
 
-                        if (state is WeatherBlocLoading) {
-                          return const CircularProgressIndicator();
-                        } else if (state is WeatherBlocFailure) {
-                          return  Text('Error ${state.message}');
+                        if (state is WeatherBlocFailure) {
+                          return  Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text('Error ${state.message}', textAlign: TextAlign.center,),
+                          );
                         } else if (state is WeatherBlocSuccess) {
                           //state.isCurrent ;
                           forecastDayList = state.weather.forecast?.forecastday;
@@ -88,7 +103,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           //var hour = Hour
                           return mainUi();
                         }
-                        return const Text('Initial');
+                        return SizedBox(
+                            height: 130,
+                            width: 130,
+                            child: Lottie.asset(AssetNames.loadingLottieJson));
                       },
                     ),
                   ],
@@ -112,7 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget mainUi() {
-    // help me to find out actually the time is day or night
 
 
     return Column(
@@ -147,10 +164,12 @@ class _HomeScreenState extends State<HomeScreen> {
             return HighlightWeatherTitle(
               maxMinCF: maxMin,
               condition: flag ? state.hourNow.current?.condition : state.hourNow.hour.condition,
-              isNight: dayHelper?.isDayOrNight(
-                  time: flag    /// if flag is true current must not be null it check above
+              isNight: dayHelper?.isDayOrNight( ///  help me to find out actually the time is day or night
+
+              time: flag    /// if flag is true current must not be null it check above
                       ? state.hourNow.current?.lastUpdated ?? ''
                       : state.hourNow.hour.time ?? '') ?? false,
+              lastUpdate: current?.lastUpdated?? '',
             );
           }
           return const SizedBox.shrink();

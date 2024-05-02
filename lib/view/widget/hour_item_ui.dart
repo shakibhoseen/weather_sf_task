@@ -69,7 +69,7 @@ class HourItemUi extends StatelessWidget {
                         : DateParse.getHourWithAm(hour),
                     textAlign: TextAlign.center,
                     style: TextFontStyle.headline16StyleInter),
-                const SizedBox(height: 8),
+                 SizedBox(height: 8.h),
                 SizedBox(
                   height: 48.w,
                   width: 48.w,
@@ -77,7 +77,7 @@ class HourItemUi extends StatelessWidget {
                     path: icon,
                   ), //CustomCacheImageShow(imageUrl: UrlHelper.getImagePath(icon) ,),
                 ),
-                const SizedBox(height: 8),
+                 SizedBox(height: 8.h),
                 BlocBuilder<DegreeBloc, DegreeState>(builder: (context, state) {
                   return Text(
                       '${state is CentigradeState ? tempC : tempF} ${state is CentigradeState ? degreeCentigrade : degreeFahrenheit}',

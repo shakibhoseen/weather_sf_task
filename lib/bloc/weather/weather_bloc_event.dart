@@ -15,3 +15,11 @@ class FetchWeather extends WeatherBlocEvent {
   @override
   List<Object> get props => [position];
 }
+
+class FetchWeatherFromHive extends WeatherBlocEvent {
+  final WeatherParentData weatherParentData;
+  const FetchWeatherFromHive(this.weatherParentData);
+
+  @override
+  List<Object> get props => [weatherParentData];
+}
