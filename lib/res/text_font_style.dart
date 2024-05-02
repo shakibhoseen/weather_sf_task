@@ -6,8 +6,8 @@ class TextFontStyle {
   TextFontStyle._();
 //new
 
-  static final headline32StyleOpenSansBold = GoogleFonts.inter(
-      color: Colors.white, fontSize: 32.sp, fontWeight: FontWeight.w700);
+  static final headline30StyleOpenSansBold = GoogleFonts.inter(
+      color: Colors.white, fontSize: 30.sp, fontWeight: FontWeight.w700);
   static final headline12StylePoppins= GoogleFonts.poppins(
       color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w400);
 
@@ -21,5 +21,8 @@ class TextFontStyle {
       color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w400);
   static final headline22StylePoppins= GoogleFonts.poppins(
       color: Colors.white, fontSize: 22.sp, fontWeight: FontWeight.w400);
+
+  static final headline32StylePoppins= GoogleFonts.poppins(
+      color: Colors.white, fontSize: 32.sp, fontWeight: FontWeight.w400);
 
 }

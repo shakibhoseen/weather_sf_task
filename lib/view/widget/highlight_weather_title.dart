@@ -27,8 +27,8 @@ class HighlightWeatherTitle extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-                width: 135.sp,
-                height: 135.sp,
+                width: 120.sp,
+                height: 120.sp,
                 child: SvgShow(
                   path: IconHelper.getSvgIcon(
                       code: condition?.code ?? 1000,
@@ -44,19 +44,19 @@ class HighlightWeatherTitle extends StatelessWidget {
                 '${state is CentigradeState ?  maxMinCF.tempC : maxMinCF.tempF} ${state is CentigradeState
                     ? degreeCentigrade
                     : degreeFahrenheit}',
-                style: TextFontStyle.headline42StylePoppins,
+                style: TextFontStyle.headline32StylePoppins,
               );
             })
           ],
         ),
 
-        addVerticalSpace(20.sp),
+        addVerticalSpace(12.sp),
         BlocBuilder<DegreeBloc, DegreeState>(
           builder: (context, degree) {
             return Text(
               '${condition?.text} - H:${getTemp(tempC: maxMinCF.mxTempC, tempF: maxMinCF.mxTempF, isCentigrade: degree is CentigradeState)} - L'
               ':${getTemp(tempC: maxMinCF.minTempC, tempF: maxMinCF.minTempF, isCentigrade: degree is CentigradeState)}',
-              style: TextFontStyle.headline18StylePoppins,
+              style: TextFontStyle.headline12StylePoppins,
             );
           }
         ),

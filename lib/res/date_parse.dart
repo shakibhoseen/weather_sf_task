@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
 
-import '../model/network/weather_parrent_model.dart';
 
 class DateParse{
   static String getHourWithAm(String time){
@@ -46,6 +45,22 @@ class DateParse{
     return time.hour>13 ? '${time.hour-12}:$extension': '${time.hour}:$extension';
   }
 
+  static String convertTodayYesterday(String time){
+    final now = DateTime.now();
+    DateFormat format = DateFormat("yyyy-MM-dd");
+    final timeDate = format.parse(time);
+    if(timeDate.day == now.day){
+      return 'Today';
+    }
+    if(timeDate.day==now.day-1 ){
+      return 'Yesterday';
+    }
+    if(timeDate.day ==now.day+1 ){
+      return 'Tomorrow';
+    }
+    return time;
+
+  }
 
 }
 

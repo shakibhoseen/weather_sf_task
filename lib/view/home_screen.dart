@@ -1,26 +1,17 @@
-import 'dart:developer';
-import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:weather_sf_task/bloc/degree/degree_bloc.dart';
 import 'package:weather_sf_task/bloc/forecast/forecast_bloc.dart';
 import 'package:weather_sf_task/bloc/highlight_weather/highlight_weather_bloc.dart';
 import 'package:weather_sf_task/bloc/weather/weather_bloc_bloc.dart';
-import 'package:weather_sf_task/component/custom_catch_image.dart';
 import 'package:weather_sf_task/component/svg_show.dart';
 import 'package:weather_sf_task/res/asset_names.dart';
 import 'package:weather_sf_task/res/color.dart';
-import 'package:weather_sf_task/res/constant.dart';
 import 'package:weather_sf_task/res/date_parse.dart';
 import 'package:weather_sf_task/res/text_font_style.dart';
 import 'package:weather_sf_task/utils/helper_widget.dart';
-import 'package:weather_sf_task/utils/icon_helper.dart';
-import 'package:weather_sf_task/utils/url_helper.dart';
 import 'package:weather_sf_task/utils/utils.dart';
 import 'package:weather_sf_task/view/widget/day_selection_ui.dart';
 import 'package:weather_sf_task/view/widget/list_hour_item_ui.dart';
@@ -30,7 +21,6 @@ import '../model/network/weather_parrent_model.dart';
 import '../res/net_conectivity.dart';
 import 'widget/bottom_ui.dart';
 import 'widget/highlight_weather_title.dart';
-import 'widget/hour_item_ui.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -84,19 +74,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     BlocBuilder<WeatherBlocBloc, WeatherBlocState>(
                       builder: (context, state) {
+
                         if (state is WeatherBlocLoading) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         } else if (state is WeatherBlocFailure) {
-                          return Text('Error ');
+                          return const Text('Error ');
                         } else if (state is WeatherBlocSuccess) {
                           //state.isCurrent ;
                           forecastDayList = state.weather.forecast?.forecastday;
                           current = state.weather.current;
-
+                          highlightWeatherBloc.add(HighLightWeatherChangedEvent(HourAndNowCombine(hour: forecastDayList![selectedDayIndex].hour![0], current: current)));
                           //var hour = Hour
                           return mainUi();
                         }
-                        return Text('Initial');
+                        return const Text('Initial');
                       },
                     ),
                   ],
@@ -128,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Text(
           'Dhaka',
-          style: TextFontStyle.headline32StyleOpenSansBold,
+          style: TextFontStyle.headline30StyleOpenSansBold,
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
