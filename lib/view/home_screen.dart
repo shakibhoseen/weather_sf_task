@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late HighlightWeatherBloc highlightWeatherBloc;
   List<Forecastday>? forecastDayList;
   Current? current;
+    DayHelper? dayHelper ;
 
   void getLocation(BuildContext context) async {
    bool?  connected = await NetConnectivity().checkInternet(context);
@@ -78,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (state is WeatherBlocLoading) {
                           return const CircularProgressIndicator();
                         } else if (state is WeatherBlocFailure) {
-                          return const Text('Error ');
+                          return  Text('Error ${state.message}');
                         } else if (state is WeatherBlocSuccess) {
                           //state.isCurrent ;
                           forecastDayList = state.weather.forecast?.forecastday;
@@ -146,6 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
             return HighlightWeatherTitle(
               maxMinCF: maxMin,
               condition: flag ? state.hourNow.current?.condition : state.hourNow.hour.condition,
+              isNight: dayHelper?.isDayOrNight(
+                  time: flag    /// if flag is true current must not be null it check above
+                      ? state.hourNow.current?.lastUpdated ?? ''
+                      : state.hourNow.hour.time ?? '') ?? false,
             );
           }
           return const SizedBox.shrink();
@@ -163,13 +168,16 @@ class _HomeScreenState extends State<HomeScreen> {
         addVerticalSpace(20.sp),
         BlocBuilder<ForecastBloc, ForecastState>(
           builder: (context, state) {
-            final dayHelper = DayHelper(
+             dayHelper = DayHelper(
                 sunrise: forecastDayList?[selectedDayIndex].astro?.sunrise ?? '',
                 sunset: forecastDayList?[selectedDayIndex].astro?.sunset ?? '');
             final p = forecastDayList?[selectedDayIndex].hour ?? [];
-            final  indexWithList = DateParse.removePastHour(p, p[0].time!); // removed past hours
-            final List<HourAndNowCombine> added = createList(indexWithList); // add current if need
-            return ListHourItemUi(hours: added, dayHelper: dayHelper);
+            final  indexWithList = DateParse.removePastHour(p, p[0].time!); /// removed past hours if needs
+            final List<HourAndNowCombine> added = createList((p, indexWithList.$2)); /// add current if need //
+            /// use for animation effect we don't remove list we just scroll position through whole list for our current Now
+            /// if you want to remove list before now  then just pass indexWithList directly;
+
+            return ListHourItemUi(hours: added, dayHelper: dayHelper!,  nowPosition: indexWithList.$2>=0? indexWithList.$2: null,);
           }
         ),
       ],
@@ -177,10 +185,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
    List<HourAndNowCombine> createList((List<Hour>, int) value,){
+     /// this is handeling current and hour forecast with now
+     /// time like sometime user may be update yesterday but then current will be past value,
+     /// because current actually the data from net when he fetch first time so we carefully handle now
+     /// time and every hour to consider the past value, if internet not available and get data from Hive ()
+     /// and find out now position if its nearly current then it takes from current otherwise take nearly hour
        if(value.$2<0){
          return value.$1.map((e) => HourAndNowCombine(hour: e)).toList();
        }
-       return value.$1.mapIndexed((index, element) => HourAndNowCombine(hour: element, current: index == 0? current : null)).toList();
+       return value.$1.mapIndexed((index, element) => HourAndNowCombine(hour: element, current: index == value.$2? current : null)).toList();
    }
 }
 

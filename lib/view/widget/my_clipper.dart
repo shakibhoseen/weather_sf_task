@@ -11,9 +11,9 @@ class MyClipper extends CustomClipper<Path> {
     // Move to the desired point (x, y)
     path.moveTo(0, size.height*0.3);
     final halfWidth = size.width/2;
-    path.quadraticBezierTo(0,0,halfWidth -20 , 0);
+    path.quadraticBezierTo(halfWidth/2,0,halfWidth -20 , 0);
     path.arcToPoint(Offset(halfWidth + 20, 0), radius: const Radius.circular(35) , clockwise: false, largeArc: true);
-    path.quadraticBezierTo( size.width, 0, size.width , size.height*0.3 );
+    path.quadraticBezierTo( size.width-halfWidth/2, 0, size.width , size.height*0.3 );
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
 

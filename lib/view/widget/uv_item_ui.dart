@@ -67,8 +67,8 @@ class SunRiseSunSetUi extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(title, style: TextFontStyle.headline16StyleInter,),
-        Text(value, style: TextFontStyle.headline22StylePoppins.copyWith(fontWeight: FontWeight.w700),),
+        Text(title, style: TextFontStyle.headline16StyleInter.copyWith(fontSize: 14),),
+        Text(value, style: TextFontStyle.headline22StylePoppins.copyWith(fontWeight: FontWeight.w700, fontSize: 18),),
 
       ],
     );
@@ -98,7 +98,7 @@ class CoverDesign extends StatelessWidget {
         ),
         padding: EdgeInsets.all(4.w),
         child: Container(
-          padding: const EdgeInsets.symmetric( vertical: 2),
+          padding: const EdgeInsets.symmetric( vertical: 8,),
           decoration: ShapeDecoration(
             gradient: LinearGradient(
               begin: const Alignment(0.26, -0.97),

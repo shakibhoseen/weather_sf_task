@@ -42,8 +42,8 @@ class WeatherBlocBloc extends Bloc<WeatherBlocEvent, WeatherBlocState> {
 
         emit(WeatherBlocSuccess(weather));
       } catch (e) {
-        log('hey $e');
-        emit(WeatherBlocFailure());
+        log('hey ${e}');
+        emit(WeatherBlocFailure(e.toString()));
       }
     });
   }
